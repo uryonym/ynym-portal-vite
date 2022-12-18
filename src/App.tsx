@@ -1,30 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { FC, useCallback, useEffect } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { firebaseAuth } from './app/firebase'
+import { useAppDispatch, useAppSelector } from './app/hooks'
+import { login, logout, selectAuthUser } from './features/authUserSlice'
+import AuthInfoScreen from './screens/AuthInfoScreen'
+import HomeScreen from './screens/HomeScreen'
+import LoadingScreen from './screens/LoadingScreen'
+import LoginScreen from './screens/LoginScreen'
+import TaskScreen from './screens/TaskScreen'
 import './App.css'
 
-const App = (): JSX.Element => {
-  const [count, setCount] = useState(0)
+const App: FC = () => {
+  const { isInitialized, isAuthenticated } = useAppSelector(selectAuthUser)
+  const dispatch = useAppDispatch()
 
-  return (
-    <div className='App'>
-      <div>
-        <a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-          <img src='/vite.svg' className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-    </div>
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <HomeScreen />,
+    },
+    {
+      path: 'task',
+      element: <TaskScreen />,
+    },
+    {
+      path: 'auth_info',
+      element: <AuthInfoScreen />,
+    },
+  ])
+
+  const refresh = useCallback(
+    async (user: User) => {
+      return await dispatch(login(user))
+    },
+    [dispatch]
   )
+
+  useEffect(() => {
+    const f = async () => {
+      onAuthStateChanged(firebaseAuth, async (user) => {
+        if (user != null && !isAuthenticated) {
+          return await refresh(user)
+        }
+        if (user == null && !isAuthenticated) {
+          dispatch(logout())
+        }
+      })
+    }
+    f()
+  }, [])
+
+  if (!isInitialized) {
+    return <LoadingScreen />
+  }
+
+  if (!isAuthenticated) {
+    return <LoginScreen />
+  }
+
+  return <RouterProvider router={router} />
 }
 
 export default App
