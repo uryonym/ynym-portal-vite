@@ -11,7 +11,21 @@ module.exports = {
     project: ['./tsconfig.json'],
   },
   plugins: ['react'],
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+  },
   settings: {
     react: {
       version: '18.2.0',

@@ -7,7 +7,7 @@ export interface Task {
   title: string
   description?: string
   dead_line?: Date | null
-  is_complete?: boolean
+  is_complete: boolean
   uid?: string
   task_list_id: string
   created_at?: Date

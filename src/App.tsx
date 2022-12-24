@@ -9,7 +9,7 @@ import HomeScreen from './screens/HomeScreen'
 import LoadingScreen from './screens/LoadingScreen'
 import LoginScreen from './screens/LoginScreen'
 import TaskScreen from './screens/TaskScreen'
-import './App.css'
+import './App.scss'
 
 const App: FC = () => {
   const { isInitialized, isAuthenticated } = useAppSelector(selectAuthUser)
@@ -32,16 +32,16 @@ const App: FC = () => {
 
   const refresh = useCallback(
     async (user: User) => {
-      return await dispatch(login(user))
+      await dispatch(login(user))
     },
     [dispatch]
   )
 
   useEffect(() => {
-    const f = async () => {
-      onAuthStateChanged(firebaseAuth, async (user) => {
+    const f = async (): Promise<void> => {
+      onAuthStateChanged(firebaseAuth, (user) => {
         if (user != null && !isAuthenticated) {
-          return await refresh(user)
+          refresh(user)
         }
         if (user == null && !isAuthenticated) {
           dispatch(logout())

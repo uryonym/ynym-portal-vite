@@ -7,14 +7,13 @@ import {
   Drawer,
   List,
   Paper,
-  Stack,
   Tab,
   Tabs,
   Typography,
 } from '@mui/material'
 import { ChangeEvent, FC, SyntheticEvent, useEffect, useState } from 'react'
-import { Swiper } from 'swiper'
-import { Swiper as ReactSwiper, SwiperSlide } from 'swiper/react'
+import type { Swiper as SwiperCore } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import BottomAppBar from '../components/BottomAppBar'
 import TaskDetail from '../components/task/TaskDetail'
@@ -30,6 +29,7 @@ import {
   updateTask,
 } from '../features/taskSlice'
 import './TaskScreen.scss'
+import 'swiper/scss'
 
 const TaskScreen: FC = () => {
   const { taskLists, currentTaskListId } = useAppSelector(selectTask)
@@ -37,16 +37,14 @@ const TaskScreen: FC = () => {
 
   const [isNewOpen, setIsNewOpen] = useState<boolean>(false)
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false)
-  const [swiper, setSwiper] = useState<Swiper | null>(null)
+  const [swiper, setSwiper] = useState<SwiperCore | null>(null)
 
-  const handleChangeTab = (e: SyntheticEvent, newValue: string) => {
-    console.log('タブの切り替え')
+  const handleChangeTab = (e: SyntheticEvent, newValue: string): void => {
     dispatch(setCurrentTaskListId(newValue))
     swiper?.slideTo(taskLists.findIndex((x) => x.id === newValue))
   }
 
-  const handleChangeSlice = (currentSwiper: Swiper) => {
-    console.log('Sliceの切り替え')
+  const handleChangeSlice = (currentSwiper: SwiperCore): void => {
     dispatch(setCurrentTaskListId(taskLists[currentSwiper.activeIndex].id))
   }
 
@@ -55,8 +53,7 @@ const TaskScreen: FC = () => {
     dispatch(updateTask(data))
   }
 
-  const handleSwiper = (currentSwiper: Swiper) => {
-    console.log('Swiperの切り替え')
+  const handleSwiper = (currentSwiper: SwiperCore): void => {
     const swiperInstance = currentSwiper
     setSwiper(swiperInstance)
   }
@@ -67,7 +64,6 @@ const TaskScreen: FC = () => {
   }
 
   useEffect(() => {
-    console.log('タスク一覧の取得')
     dispatch(getTaskLists())
   }, [dispatch])
 
@@ -83,7 +79,7 @@ const TaskScreen: FC = () => {
     )
   })
 
-  const dispTasks = (tasks: Task[]) =>
+  const dispTasks = (tasks: Task[]): JSX.Element[] =>
     tasks
       .filter((x) => !x.is_complete)
       .map((task: Task, index: number, array: Task[]) => {
@@ -99,7 +95,7 @@ const TaskScreen: FC = () => {
         )
       })
 
-  const dispCompletedTasks = (tasks: Task[]) =>
+  const dispCompletedTasks = (tasks: Task[]): JSX.Element[] =>
     tasks
       .filter((x) => x.is_complete)
       .map((task: Task, index, array) => {
@@ -131,7 +127,7 @@ const TaskScreen: FC = () => {
               </Paper>
               <Accordion variant='outlined'>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography>Completed</Typography>
+                  <Typography>完了</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <List>{dispCompletedTasks(taskList.tasks)}</List>
@@ -147,19 +143,17 @@ const TaskScreen: FC = () => {
   return (
     <>
       <Box className='task-main'>
-        <Stack>
-          <Typography variant='h4'>タスク</Typography>
-          {currentTaskListId && (
-            <>
-              <Tabs value={currentTaskListId} variant='scrollable' onChange={handleChangeTab}>
-                {dispTaskListTabs}
-              </Tabs>
-              <ReactSwiper onSlideChange={handleChangeSlice} onSwiper={handleSwiper}>
-                {dispTabPanels}
-              </ReactSwiper>
-            </>
-          )}
-        </Stack>
+        <Typography variant='h4'>タスク</Typography>
+        {currentTaskListId !== null && (
+          <>
+            <Tabs value={currentTaskListId} variant='scrollable' onChange={handleChangeTab}>
+              {dispTaskListTabs}
+            </Tabs>
+            <Swiper onSwiper={handleSwiper} onSlideChange={handleChangeSlice}>
+              {dispTabPanels}
+            </Swiper>
+          </>
+        )}
       </Box>
       <Drawer anchor='bottom' open={isNewOpen} onClose={() => setIsNewOpen(false)}>
         <TaskNew onClose={() => setIsNewOpen(false)} />

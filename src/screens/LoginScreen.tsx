@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { FC } from 'react'
 import { useAppDispatch } from '../app/hooks'
 import BottomAppBar from '../components/BottomAppBar'
@@ -15,9 +15,8 @@ const LoginScreen: FC = () => {
   return (
     <>
       <Box className='login-main'>
-        <Typography variant='h3'>SignIn</Typography>
         <Button variant='contained' onClick={handleClickSignIn}>
-          SignIn
+          サインイン
         </Button>
       </Box>
       <BottomAppBar />
