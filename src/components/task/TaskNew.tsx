@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { createTask, selectTask } from '../../features/taskSlice'
 import './TaskNew.scss'
 
-type TaskNewProps = {
+interface TaskNewProps {
   onClose: () => void
 }
 
@@ -29,6 +29,7 @@ const TaskNew: FC<TaskNewProps> = ({ onClose }) => {
       const data = {
         title,
         dead_line: deadLine,
+        is_complete: false,
         task_list_id: currentTaskListId,
       }
       dispatch(createTask(data))

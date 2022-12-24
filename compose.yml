@@ -1,0 +1,19 @@
+services:
+  ynym-portal:
+    build: .
+    image: ynym-portal-frontend
+    container_name: ynym-portal-frontend
+    hostname: ynym-portal-frontend
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - default
+      - proxy-network
+
+networks:
+  default:
+    name: ynym-portal-network
+    external: true
+  proxy-network:
+    external: true
