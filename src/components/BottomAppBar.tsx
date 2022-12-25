@@ -1,4 +1,4 @@
-import { Add, Menu } from '@mui/icons-material'
+import { Add, ArrowBack, Menu, MoreVert } from '@mui/icons-material'
 import {
   AppBar,
   Box,
@@ -20,7 +20,10 @@ import SpaceBox from './SpaceBox'
 import './BottomAppBar.scss'
 
 type BottomAppBarProps = {
+  backable?: boolean
+  onClose?: () => void
   onAddItem?: () => void
+  subMenu?: JSX.Element
 }
 
 const MenuButton: FC = () => {
@@ -55,6 +58,11 @@ const MenuButton: FC = () => {
                 <ListItemText primary='認証情報' />
               </ListItemButton>
             </ListItem>
+            <ListItem>
+              <ListItemButton component={Link} to='/refueling'>
+                <ListItemText primary='燃費記録' />
+              </ListItemButton>
+            </ListItem>
           </List>
           <Divider />
           <List>
@@ -70,17 +78,35 @@ const MenuButton: FC = () => {
   )
 }
 
-const BottomAppBar: FC<BottomAppBarProps> = ({ onAddItem }) => {
+const BottomAppBar: FC<BottomAppBarProps> = ({ backable = false, onClose, onAddItem, subMenu }) => {
+  const [isOpenSubMenu, setIsOpenSubMenu] = useState(false)
+
   return (
     <AppBar className='bottom-app-bar' position='fixed'>
       <Toolbar>
-        <MenuButton />
+        {backable ? (
+          <IconButton color='inherit' onClick={onClose}>
+            <ArrowBack />
+          </IconButton>
+        ) : (
+          <MenuButton />
+        )}
         {onAddItem && (
           <Fab className='add-fab' color='secondary' onClick={onAddItem}>
             <Add />
           </Fab>
         )}
         <SpaceBox />
+        {subMenu && (
+          <>
+            <IconButton color='inherit' onClick={() => setIsOpenSubMenu(true)}>
+              <MoreVert />
+            </IconButton>
+            <Drawer anchor='bottom' open={isOpenSubMenu} onClose={() => setIsOpenSubMenu(false)}>
+              {subMenu}
+            </Drawer>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   )

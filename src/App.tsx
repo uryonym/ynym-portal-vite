@@ -8,6 +8,7 @@ import AuthInfoScreen from './screens/AuthInfoScreen'
 import HomeScreen from './screens/HomeScreen'
 import LoadingScreen from './screens/LoadingScreen'
 import LoginScreen from './screens/LoginScreen'
+import RefuelingScreen from './screens/RefuelingScreen'
 import TaskScreen from './screens/TaskScreen'
 import './App.scss'
 
@@ -27,6 +28,10 @@ const App: FC = () => {
     {
       path: 'auth_info',
       element: <AuthInfoScreen />,
+    },
+    {
+      path: 'refueling',
+      element: <RefuelingScreen />,
     },
   ])
 
