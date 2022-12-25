@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createCarApi, deleteCarApi, getCarsApi, updateCarApi } from '../api/carApi'
 import { RootState } from '../app/store'
 
-export interface Car {
+export type Car = {
   id?: string
   name: string
   maker: string
@@ -15,7 +15,7 @@ export interface Car {
   updated_at?: Date
 }
 
-export interface CarState {
+export type CarState = {
   cars: Car[]
   currentCar?: Car
   status: 'idle' | 'loading' | 'failed'

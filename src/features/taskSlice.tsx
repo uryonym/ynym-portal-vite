@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createTaskApi, deleteTaskApi, getTaskListsApi, updateTaskApi } from '../api/taskApi'
 import { RootState } from '../app/store'
 
-export interface Task {
+export type Task = {
   id?: string
   title: string
   description?: string
@@ -14,7 +14,7 @@ export interface Task {
   updated_at?: Date
 }
 
-export interface TaskList {
+export type TaskList = {
   id: string
   name: string
   uid: string
@@ -24,7 +24,7 @@ export interface TaskList {
   updated_at: Date
 }
 
-export interface TaskState {
+export type TaskState = {
   taskLists: TaskList[]
   currentTaskListId?: string
   currentTask?: Task

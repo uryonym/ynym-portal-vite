@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createAuthInfoApi, deleteAuthInfoApi, getAuthInfosApi, updateAuthInfoApi } from '../api/authInfoApi'
 import { RootState } from '../app/store'
 
-export interface AuthInfo {
+export type AuthInfo = {
   id?: string
   service_name: string
   login_id: string
@@ -12,7 +12,7 @@ export interface AuthInfo {
   updated_at?: Date
 }
 
-export interface AuthInfoState {
+export type AuthInfoState = {
   authInfos: AuthInfo[]
   currentAuthInfo?: AuthInfo
   status: 'idle' | 'loading' | 'failed'

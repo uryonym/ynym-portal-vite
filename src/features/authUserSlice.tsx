@@ -3,7 +3,7 @@ import { getRedirectResult, GoogleAuthProvider, signInWithRedirect, signOut, Use
 import { firebaseAuth } from '../app/firebase'
 import { RootState } from '../app/store'
 
-export interface AuthUserState {
+export type AuthUserState = {
   isInitialized: boolean
   isAuthenticated: boolean
   user: User | null
@@ -41,7 +41,7 @@ export const login = createAsyncThunk<User | null, User | undefined, { rejectVal
   }
 )
 
-export const logout = createAsyncThunk<void, undefined, { rejectValue: string }>(
+export const logout = createAsyncThunk<undefined, undefined, { rejectValue: string }>(
   'authUser/signOut',
   async (_, { rejectWithValue }) => {
     try {
