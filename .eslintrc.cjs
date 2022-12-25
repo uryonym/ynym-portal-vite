@@ -15,6 +15,7 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     'import/order': [
       'error',
       {

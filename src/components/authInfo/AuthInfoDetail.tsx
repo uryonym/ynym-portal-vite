@@ -1,8 +1,9 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { AppBar, Box, Button, IconButton, Stack, TextField, Toolbar } from '@mui/material'
+import { AppBar, Box, Button, IconButton, Stack, Toolbar } from '@mui/material'
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { deleteAuthInfo, selectAuthInfo, updateAuthInfo } from '../../features/authInfoSlice'
+import BaseTextField from '../BaseTextField'
 import DeleteConfirmDialog from '../DeleteConfirmDialog'
 import './AuthInfoDetail.scss'
 
@@ -57,7 +58,7 @@ const AuthInfoDetail: FC<AuthInfoDetailProps> = ({ onClose }) => {
 
   const handleDelete = () => {
     setIsOpen(false)
-    if (currentAuthInfo && currentAuthInfo.id) {
+    if (currentAuthInfo?.id) {
       dispatch(deleteAuthInfo(currentAuthInfo.id))
     }
     onClose()
@@ -71,46 +72,18 @@ const AuthInfoDetail: FC<AuthInfoDetailProps> = ({ onClose }) => {
     if (currentAuthInfo) {
       setServiceName(currentAuthInfo.service_name)
       setLoginId(currentAuthInfo.login_id)
-      setPassword(currentAuthInfo.password || '')
-      setOther(currentAuthInfo.other || '')
+      setPassword(currentAuthInfo.password ?? '')
+      setOther(currentAuthInfo.other ?? '')
     }
   }, [currentAuthInfo])
 
   return (
     <>
       <Box className='auth-info-detail-main'>
-        <TextField
-          className='auth-info-detail-form'
-          fullWidth
-          placeholder='サービス名を入力'
-          variant='standard'
-          value={serviceName}
-          onChange={handleChangeServiceName}
-        />
-        <TextField
-          className='auth-info-detail-form'
-          fullWidth
-          placeholder='ログインIDを入力'
-          variant='standard'
-          value={loginId}
-          onChange={handleChangeLoginId}
-        />
-        <TextField
-          className='auth-info-detail-form'
-          fullWidth
-          placeholder='パスワードを入力'
-          variant='standard'
-          value={password}
-          onChange={handleChangePassword}
-        />
-        <TextField
-          className='auth-info-detail-form'
-          fullWidth
-          placeholder='備考を入力'
-          variant='standard'
-          value={other}
-          onChange={handleChangeOther}
-        />
+        <BaseTextField placeholder='サービス名を入力' value={serviceName} onChange={handleChangeServiceName} />
+        <BaseTextField placeholder='ログインIDを入力' value={loginId} onChange={handleChangeLoginId} />
+        <BaseTextField placeholder='パスワードを入力' value={password} onChange={handleChangePassword} />
+        <BaseTextField placeholder='備考を入力' value={other} onChange={handleChangeOther} />
         <Stack direction='row' justifyContent='space-between'>
           <Button variant='outlined' color='error' onClick={handleClickDelete}>
             削除

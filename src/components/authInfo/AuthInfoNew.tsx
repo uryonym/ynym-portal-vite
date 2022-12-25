@@ -1,7 +1,8 @@
-import { AppBar, Box, Button, TextField, Toolbar } from '@mui/material'
+import { AppBar, Box, Button, Toolbar } from '@mui/material'
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { useAppDispatch } from '../../app/hooks'
 import { createAuthInfo } from '../../features/authInfoSlice'
+import BaseTextField from '../BaseTextField'
 import './AuthInfoNew.scss'
 
 type AuthInfoNewProps = {
@@ -53,39 +54,15 @@ const AuthInfoNew: FC<AuthInfoNewProps> = ({ onClose }) => {
   return (
     <>
       <Box className='auth-info-new-main'>
-        <TextField
-          className='auth-info-new-form'
-          fullWidth
+        <BaseTextField
           placeholder='サービス名を入力'
-          variant='standard'
           value={serviceName}
           onChange={handleChangeServiceName}
           inputRef={serviceNameInputRef}
         />
-        <TextField
-          className='auth-info-new-form'
-          fullWidth
-          placeholder='ログインIDを入力'
-          variant='standard'
-          value={loginId}
-          onChange={handleChangeLoginId}
-        />
-        <TextField
-          className='auth-info-new-form'
-          fullWidth
-          placeholder='パスワードを入力'
-          variant='standard'
-          value={password}
-          onChange={handleChangePassword}
-        />
-        <TextField
-          className='auth-info-new-form'
-          fullWidth
-          placeholder='備考を入力'
-          variant='standard'
-          value={other}
-          onChange={handleChangeOther}
-        />
+        <BaseTextField placeholder='ログインIDを入力' value={loginId} onChange={handleChangeLoginId} />
+        <BaseTextField placeholder='パスワードを入力' value={password} onChange={handleChangePassword} />
+        <BaseTextField placeholder='備考を入力' value={other} onChange={handleChangeOther} />
       </Box>
       <AppBar position='static' color='inherit'>
         <Toolbar>

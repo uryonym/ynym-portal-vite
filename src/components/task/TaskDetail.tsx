@@ -1,13 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import DescriptionIcon from '@mui/icons-material/Description'
-import { AppBar, Box, Button, IconButton, InputAdornment, TextField, Toolbar } from '@mui/material'
+import { AppBar, Box, Button, IconButton, InputAdornment, Toolbar } from '@mui/material'
 import { Stack } from '@mui/system'
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { deleteTask, selectTask, updateTask } from '../../features/taskSlice'
+import BaseTextField from '../BaseTextField'
 import DeleteConfirmDialog from '../DeleteConfirmDialog'
 import './TaskDetail.scss'
 
@@ -52,7 +53,7 @@ const TaskDetail: FC<TaskDetailProps> = ({ onClose }) => {
 
   const handleDelete = () => {
     setIsOpen(false)
-    if (currentTask && currentTask.id) {
+    if (currentTask?.id) {
       dispatch(deleteTask(currentTask.id))
     }
     onClose()
@@ -76,7 +77,7 @@ const TaskDetail: FC<TaskDetailProps> = ({ onClose }) => {
   useEffect(() => {
     if (currentTask) {
       setTitle(currentTask.title)
-      setDescription(currentTask.description || '')
+      setDescription(currentTask.description ?? '')
       setDeadLine(currentTask.dead_line)
     }
   }, [currentTask])
@@ -84,15 +85,7 @@ const TaskDetail: FC<TaskDetailProps> = ({ onClose }) => {
   return (
     <>
       <Box className='task-detail-main'>
-        <TextField
-          className='task-detail-form'
-          multiline
-          fullWidth
-          placeholder='タスクを入力'
-          variant='standard'
-          value={title}
-          onChange={handleChangeTitle}
-        />
+        <BaseTextField multiline placeholder='タスクを入力' value={title} onChange={handleChangeTitle} />
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <MobileDatePicker
             value={deadLine}
@@ -100,11 +93,8 @@ const TaskDetail: FC<TaskDetailProps> = ({ onClose }) => {
               setDeadLine(newValue)
             }}
             renderInput={(params) => (
-              <TextField
+              <BaseTextField
                 {...params}
-                className='task-detail-form'
-                fullWidth
-                variant='standard'
                 placeholder='期限を入力'
                 InputProps={{
                   startAdornment: (
@@ -118,12 +108,9 @@ const TaskDetail: FC<TaskDetailProps> = ({ onClose }) => {
           />
         </LocalizationProvider>
 
-        <TextField
-          className='task-detail-form'
+        <BaseTextField
           multiline
-          fullWidth
           placeholder='詳細を入力'
-          variant='standard'
           value={description}
           onChange={handleChangeDescription}
           InputProps={{
